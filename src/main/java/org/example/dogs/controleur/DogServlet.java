@@ -14,47 +14,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@WebServlet("/dog/*")
+@WebServlet(name = "dogservlet",value = "/dog/*")
 public class DogServlet extends HttpServlet {
-
     private List<Dog> dogs;
 
     @Override
-    public void init(){
+    public void init() throws ServletException {
         dogs = new ArrayList<>();
-        dogs.add(new Dog(UsefullMethods.setDogId(dogs),"Medodor","Berger do Mordor", LocalDate.now()));
-        dogs.add(new Dog(UsefullMethods.setDogId(dogs),"Medudur","Berger du Murdur", LocalDate.now()));
-        dogs.add(new Dog(UsefullMethods.setDogId(dogs),"Mididir","Birgir di Mirdir", LocalDate.now()));
-
+        dogs.add(new Dog(42,"rantanplan","toutou", LocalDate.now()));
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        String pathInfo = req.getPathInfo();
-        System.out.println("pathInfo: " + pathInfo);
-
-        switch (pathInfo) {
-            case ("/list/"):
-                req.getRequestDispatcher("/WEB-INF/list.jsp").forward(req, resp);
+        String action = req.getPathInfo().substring(1);
+        System.out.println(action);
+        switch (action){
+            case "list" :
+                showAll(req,resp);
                 break;
-            case ("/add/"):
-                req.getRequestDispatcher("/WEB-INF/addDog.jsp").forward(req, resp);
+            case "add" :
+                showForm(req,resp);
                 break;
             default:
-                long id = Long.parseLong(pathInfo);
-                Dog dog = null;
-
-                for (Dog d : dogs)
-                    if (d.getId() == id)
-                        dog = d;
-                        req.setAttribute("dog", dog);
-                        req.getRequestDispatcher("/WEB-INF/view.jsp").forward(req,resp);
-
-                //if (dog == null)
-
-
+                showDetail(req,resp);
+                break;
         }
+    }
+
+    protected void showAll(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("dogs", dogs);
+        req.getRequestDispatcher("/WEB-INF/dog/list.jsp").forward(req,resp);
+    }
+    protected void showForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("/WEB-INF/dog/add.jsp").forward(req,resp);
+    }
+    protected void showDetail(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String idRecup = req.getParameter("id");
+        req.setAttribute("id",idRecup);
+        req.getRequestDispatcher("/WEB-INF/dog/view.jsp").forward(req,resp);
     }
 
     @Override

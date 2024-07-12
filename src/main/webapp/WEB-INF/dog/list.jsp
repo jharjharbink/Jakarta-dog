@@ -11,12 +11,8 @@
 <head>
     <title>Title</title>
     <title>l'amical des chiens</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous">
-    </script>
+    <%@include file="/WEB-INF/bootstrapImport.jsp"%>
+
 </head>
 <body>
     <div class="container">
@@ -34,11 +30,11 @@
             <tbody>
             <% for (int i = 0; i < dogs.size(); i++) { %>
             <tr>
-                <td><%= dogs.get(i).getId() %></td>dogs.ge
+                <td><%= dogs.get(i).getId() %></td>
                 <td><%= dogs.get(i).getName() %></td>
                 <td><%= dogs.get(i).getRace() %></td>
                 <td>
-                    <a class="btn btn-primary" href="dog/"+i role="button">Détail</a>
+                    <a class="btn btn-outline-info" href="${pageContext.request.contextPath}/dog/"<%=+dogs.get(i).getId()%> role="button">Détail</a>
                 </td>
             </tr>
             <% } %>
